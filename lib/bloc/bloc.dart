@@ -75,11 +75,13 @@ class AppCubit extends Cubit<AppStates> {
 
   void playVerse(key) {
     AudioPlayer player = AudioPlayer();
-    getVerseAudio(recitor: '3', verseKey: key);
+    getVerseAudio(recitor: '6', verseKey: key);
     emit(AppUserPlayVersesLoadingState());
+    player.stop();
     player.setUrl("https://verses.quran.com/${verseUrl}").then((value) {
       print(verseUrl);
       player.play();
+      // player.stop();
       emit(AppUserPlayVersesSuccessState());
     });
   }

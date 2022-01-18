@@ -69,7 +69,7 @@ class ChapterViewScreen extends StatelessWidget {
                             reverse: true,
                             onPageChanged: (value) {
                               cubit.getVerseAudio(
-                                recitor: '3',
+                                recitor: '2',
                                 verseKey: cubit.ayaIndex.toString(),
                               );
                             },
@@ -118,6 +118,7 @@ class ChapterViewScreen extends StatelessWidget {
                           //   player.play();
                           // });
                           // }
+
                           cubit.playVerse(cubit.ayaIndex);
                         },
                         child: Text(
@@ -155,7 +156,6 @@ class VerseBuilder extends StatelessWidget {
     return Text(
       "${text}",
       textDirection: TextDirection.rtl,
-    
       style: GoogleFonts.cairo(
         fontSize: 45,
         color: whiteColor,
