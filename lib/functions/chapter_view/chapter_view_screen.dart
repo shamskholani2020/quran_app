@@ -147,11 +147,7 @@ class VerseBuilder extends StatelessWidget {
     return Text(
       "${text}",
       textDirection: TextDirection.rtl,
-      // style: GoogleFonts.cairo(
-      //   color: Colors.white,
-      //   fontSize: 24,
-      //   fontWeight: FontWeight.w600,
-      // ),
+    
       style: GoogleFonts.cairo(
         fontSize: 50,
         color: whiteColor,
