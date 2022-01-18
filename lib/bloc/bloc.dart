@@ -6,6 +6,7 @@ import 'package:app/network/dio_helper.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_audio/just_audio.dart';
 
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(InitialState());
@@ -48,7 +49,8 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   AudioFiles? verseAudioModel;
-  void getVerseAudio({
+  String? verseUrl;
+  getVerseAudio({
     required String recitor,
     required String verseKey,
   }) {
@@ -56,7 +58,8 @@ class AppCubit extends Cubit<AppStates> {
     DioHelper.getData(
       url: '/recitations/$recitor/by_ayah/$verseKey',
     ).then((value) {
-      // verseAudioModel = AudioFiles.fromJson(value.data['audio_files']);
+      verseAudioModel = AudioFiles.fromJson(value.data);
+      verseUrl = value.data['audio_files'][0]['url'];
       print(value.data);
     }).catchError((error) {
       print(error.toString());
@@ -68,5 +71,16 @@ class AppCubit extends Cubit<AppStates> {
   void getIndex(index) {
     ayaIndex = index;
     emit(AppUserGetIndex());
+  }
+
+  void playVerse(key) {
+    AudioPlayer player = AudioPlayer();
+    getVerseAudio(recitor: '3', verseKey: key);
+    emit(AppUserPlayVersesLoadingState());
+    player.setUrl("https://verses.quran.com/${verseUrl}").then((value) {
+      print(verseUrl);
+      player.play();
+      emit(AppUserPlayVersesSuccessState());
+    });
   }
 }

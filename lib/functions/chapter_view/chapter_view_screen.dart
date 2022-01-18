@@ -2,24 +2,24 @@ import 'package:app/bloc/bloc.dart';
 import 'package:app/bloc/states.dart';
 import 'package:app/styles/color_styles.dart';
 import 'package:app/styles/font_styles.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:just_audio/just_audio.dart';
 
 class ChapterViewScreen extends StatelessWidget {
   int? id;
   int? chapter_number;
   String? text;
   PageController pageController = PageController();
-  AudioPlayer audioPlayer = AudioPlayer();
   ChapterViewScreen({
     required this.id,
     required this.chapter_number,
     required this.text,
   });
+  final player = AudioPlayer();
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +63,16 @@ class ChapterViewScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: PageView.builder(
+                            physics: const BouncingScrollPhysics(),
                             controller: pageController,
                             scrollDirection: Axis.horizontal,
                             reverse: true,
-                            onPageChanged: (value) {},
+                            onPageChanged: (value) {
+                              cubit.getVerseAudio(
+                                recitor: '3',
+                                verseKey: cubit.ayaIndex.toString(),
+                              );
+                            },
                             pageSnapping: true,
                             itemCount: cubit.versesModel!.verses!.length,
                             itemBuilder: (context, index) {
@@ -78,47 +84,49 @@ class ChapterViewScreen extends StatelessWidget {
                                   .versesModel!.verses![index].verseKey
                                   .toString();
                               print(cubit.ayaIndex);
-                              return VerseBuilder(
-                                text: cubit
-                                    .versesModel!.verses![index].textUthmani,
-                                index: index,
+                              return SingleChildScrollView(
+                                child: VerseBuilder(
+                                  text: cubit
+                                      .versesModel!.verses![index].textUthmani,
+                                  index: index,
+                                ),
                               );
                             }),
                       ),
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Container(
-                          width: double.infinity,
-                          height: 90,
-                          // color: secondaryColor,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              if (cubit.ayaIndex != null)
-                                IconButton(
-                                  onPressed: () async {
-                                    cubit.getVerseAudio(
-                                      recitor: '3',
-                                      verseKey: cubit.ayaIndex.toString(),
-                                    );
-
-                                    await audioPlayer
-                                        .play(
-                                            'https://verses.quran.com/${cubit.verseAudioModel!.url}')
-                                        .then((value) {
-                                      audioPlayer.stop();
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.play_arrow,
-                                    color: Colors.deepOrange,
-                                    size: 36,
-                                  ),
-                                ),
-                            ],
-                          ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          //   await audioPlayer.play(
+                          //       "https://verses.quran.com/${cubit.verseAudioModel!.url!}");
+                          // } else {
+                          // await audioPlayer
+                          //     .play(
+                          //         'https://verses.quran.com/Sudais/mp3/002014.mp3')
+                          //     .then((value) {
+                          //   audioPlayer.stop();
+                          // });
+                          // print('Fun');
+                          // await player.setUrl(
+                          //     'https://verses.quran.com/Sudais/mp3/002014.mp3');
+                          // await player.play();
+                          // }
+                          // if (cubit.verseAudioModel!.url != null) {
+                          // player
+                          //     .setUrl(
+                          //         // "https://verses.quran.com/${cubit.verseAudioModel!.url}")
+                          //         "https://verses.quran.com/Sudais/mp3/002014.mp3")
+                          //     .then((value) {
+                          //   player.play();
+                          // });
+                          // }
+                          cubit.playVerse(cubit.ayaIndex);
+                        },
+                        child: Text(
+                          'استماع',
+                          style: A18500,
                         ),
+                      ),
+                      const SizedBox(
+                        height: 20,
                       ),
                     ],
                   ),
@@ -153,7 +161,7 @@ class VerseBuilder extends StatelessWidget {
       //   fontWeight: FontWeight.w600,
       // ),
       style: GoogleFonts.cairo(
-        fontSize: 50,
+        fontSize: 45,
         color: whiteColor,
         fontWeight: FontWeight.w500,
       ),

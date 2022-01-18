@@ -21,3 +21,9 @@ class AppUserGetVerseSoundSuccessState extends AppStates {}
 class AppUserGetVerseSoundErrorState extends AppStates {}
 
 class AppUserGetIndex extends AppStates {}
+
+class AppUserPlayVersesLoadingState extends AppStates {}
+
+class AppUserPlayVersesSuccessState extends AppStates {}
+
+class AppUserPlayVersesErrorState extends AppStates {}

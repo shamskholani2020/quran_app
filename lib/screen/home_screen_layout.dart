@@ -41,6 +41,7 @@ class HomeScreenLayout extends StatelessWidget {
               builder: (c) => Padding(
                 padding: const EdgeInsets.all(20),
                 child: ListView.separated(
+                  physics: const BouncingScrollPhysics(),
                   itemCount: cubit.surahs!.length,
                   separatorBuilder: (BuildContext context, int index) {
                     return const SizedBox(
