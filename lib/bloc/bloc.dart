@@ -73,9 +73,15 @@ class AppCubit extends Cubit<AppStates> {
     emit(AppUserGetIndex());
   }
 
-  void playVerse(key) {
-    AudioPlayer player = AudioPlayer();
-    getVerseAudio(recitor: '6', verseKey: key);
+  String? recitor = '1';
+  void changeRecitor(id) {
+    recitor = id;
+    emit(AppUserRandomState());
+  }
+
+  AudioPlayer player = AudioPlayer();
+  void playVerse(key, String recitor) {
+    getVerseAudio(recitor: recitor, verseKey: key);
     emit(AppUserPlayVersesLoadingState());
     player.stop();
     player.setUrl("https://verses.quran.com/${verseUrl}").then((value) {
@@ -83,6 +89,32 @@ class AppCubit extends Cubit<AppStates> {
       player.play();
       // player.stop();
       emit(AppUserPlayVersesSuccessState());
+    });
+  }
+
+  var names = [];
+  void getNames() {
+    emit(AppUserGetShikhsLoadingState());
+    DioHelper.getData(url: '/resources/recitations', query: {
+      "language": "ar",
+    }).then((value) {
+      names = [];
+      names = value.data['recitations'];
+      print('Hello ${value.data['recitations'][0]['translated_name']['name']}');
+      emit(AppUserGetShikhsSuccessState());
+    });
+  }
+
+  Map? tafseer;
+  void getTafseer(key) {
+    emit(AppUserGetTafseerLoadingState());
+    DioHelper.getData(url: '/quran/tafsirs/90', query: {
+      "verse_key": key.toString(),
+    }).then((value) {
+      tafseer = value.data;
+      print(tafseer!['tafsirs'][0]['text']);
+
+      emit(AppUserGetTafseerSuccessState());
     });
   }
 }

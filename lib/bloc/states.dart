@@ -27,3 +27,13 @@ class AppUserPlayVersesLoadingState extends AppStates {}
 class AppUserPlayVersesSuccessState extends AppStates {}
 
 class AppUserPlayVersesErrorState extends AppStates {}
+
+class AppUserGetShikhsLoadingState extends AppStates {}
+
+class AppUserGetShikhsSuccessState extends AppStates {}
+
+class AppUserRandomState extends AppStates {}
+
+class AppUserGetTafseerLoadingState extends AppStates {}
+
+class AppUserGetTafseerSuccessState extends AppStates {}
