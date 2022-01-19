@@ -117,4 +117,14 @@ class AppCubit extends Cubit<AppStates> {
       emit(AppUserGetTafseerSuccessState());
     });
   }
+
+  void random() {
+    emit(AppUserRandomState());
+  }
+
+  bool? isAuto = false;
+  void autoPlay() {
+    isAuto = !isAuto!;
+    emit(AppUserRandomState());
+  }
 }

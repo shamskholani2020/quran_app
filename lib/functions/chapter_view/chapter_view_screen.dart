@@ -11,6 +11,8 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
 
+import '../../styles/color_styles.dart';
+
 class ChapterViewScreen extends StatelessWidget {
   int? id;
   int? chapter_number;
@@ -21,7 +23,6 @@ class ChapterViewScreen extends StatelessWidget {
     required this.chapter_number,
     required this.text,
   });
-  final player = AudioPlayer();
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +59,7 @@ class ChapterViewScreen extends StatelessWidget {
                     navigateBack(context);
                     cubit.player.stop();
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_back_ios_new_rounded,
                   ),
                 ),
@@ -73,15 +74,6 @@ class ChapterViewScreen extends StatelessWidget {
                   fallback: (c) => LinearProgressIndicator(
                     color: primaryColor,
                   ),
-                  // builder: (c) => ListView.builder(
-                  //   itemCount: cubit.versesModel!.verses!.length,
-                  //   itemBuilder: (BuildContext context, int index) {
-                  //     return VerseBuilder(
-                  //       cubit: cubit,
-                  //       index: index,
-                  //     );
-                  //   },
-                  // ),
                   builder: (c) => Column(
                     children: [
                       Expanded(
@@ -117,11 +109,46 @@ class ChapterViewScreen extends StatelessWidget {
                               );
                             }),
                       ),
-                      Expanded(
-                        child: TestButton(
-                          cubit: cubit,
-                          state: state,
-                        ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                'الاعدادات',
+                                style: A18500,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: TextButton(
+                              onPressed: cubit.isAuto!
+                                  ? () {
+                                      cubit.autoPlay();
+                                      cubit.player.stop();
+                                    }
+                                  : () {
+                                      cubit.autoPlay();
+                                      cubit.playVerse(key, '3');
+                                      pageController.animateTo(
+                                        pageController.offset + 1,
+                                        duration: Duration(milliseconds: 300),
+                                        curve: Curves.easeIn,
+                                      );
+                                      cubit.random();
+                                    },
+                              child: cubit.isAuto!
+                                  ? Text(
+                                      'إيقاف',
+                                      style: A18500,
+                                    )
+                                  : Text(
+                                      'تلاوة مستمرة',
+                                      style: A18500,
+                                    ),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         height: 10,
@@ -158,7 +185,7 @@ class VerseBuilder extends StatelessWidget {
             "${text}",
             textDirection: TextDirection.rtl,
             style: GoogleFonts.cairo(
-              fontSize: 45,
+              fontSize: 35,
               color: whiteColor,
               fontWeight: FontWeight.w500,
             ),
@@ -181,7 +208,7 @@ class TestButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CircularMenu(
-      alignment: Alignment.bottomCenter,
+      alignment: Alignment.bottomLeft,
       toggleButtonColor: secondaryColor,
       items: [
         CircularMenuItem(
@@ -239,7 +266,8 @@ class TestButton extends StatelessWidget {
         ),
         CircularMenuItem(
           color: secondaryColor,
-          onTap: () async {
+          onTap: () {
+            cubit.random();
             cubit.getTafseer(cubit.ayaIndex);
 
             showModalBottomSheet(
@@ -248,19 +276,25 @@ class TestButton extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 color: primaryColor,
-                child: ConditionalBuilder(
-                  condition: state is! AppUserGetTafseerLoadingState,
-                  builder: (c) => SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Text(
-                      cubit.tafseer!['tafsirs'][0]['text'],
-                      style: N18500.copyWith(
-                        color: Colors.white,
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Text(
+                        'تفسير القرطبي',
+                        style: A22500,
                       ),
-                    ),
-                  ),
-                  fallback: (c) => LinearProgressIndicator(
-                    color: secondaryColor,
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        cubit.tafseer!['tafsirs'][0]['text'],
+                        style: N18500.copyWith(
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.end,
+                      ),
+                    ],
                   ),
                 ),
               ),
