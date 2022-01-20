@@ -87,6 +87,7 @@ class AppCubit extends Cubit<AppStates> {
     player.setUrl("https://verses.quran.com/${verseUrl}").then((value) {
       print(verseUrl);
       player.play();
+
       // player.stop();
       emit(AppUserPlayVersesSuccessState());
     });
@@ -126,5 +127,20 @@ class AppCubit extends Cubit<AppStates> {
   void autoPlay() {
     isAuto = !isAuto!;
     emit(AppUserRandomState());
+  }
+
+  void continuosPlay({
+    required String recitorKey,
+    required String verseKey,
+    required bool isAuto,
+    required PageController pageController,
+  }) {
+    player.setUrl("https://verses.quran.com/${verseUrl}");
+    player.play().then((value) {
+      pageController.nextPage(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeIn,
+      );
+    });
   }
 }

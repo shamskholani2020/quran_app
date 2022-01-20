@@ -113,7 +113,14 @@ class ChapterViewScreen extends StatelessWidget {
                         children: [
                           Expanded(
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                cubit.continuosPlay(
+                                  recitorKey: cubit.recitor!,
+                                  verseKey: cubit.ayaIndex!,
+                                  isAuto: cubit.isAuto!,
+                                  pageController: pageController,
+                                );
+                              },
                               child: Text(
                                 'الاعدادات',
                                 style: A18500,
