@@ -126,7 +126,7 @@ class AppCubit extends Cubit<AppStates> {
   bool? isAuto = false;
   void autoPlay() {
     isAuto = !isAuto!;
-    emit(AppUserRandomState());
+    random();
   }
 
   void continuosPlay({

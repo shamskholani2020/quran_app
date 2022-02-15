@@ -5,10 +5,12 @@ import 'package:app/styles/color_styles.dart';
 import 'package:app/styles/font_styles.dart';
 import 'package:circular_menu/circular_menu.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:just_audio/just_audio.dart';
 
 import '../../styles/color_styles.dart';
@@ -109,56 +111,119 @@ class ChapterViewScreen extends StatelessWidget {
                               );
                             }),
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextButton(
-                              onPressed: () {
-                                cubit.continuosPlay(
-                                  recitorKey: cubit.recitor!,
-                                  verseKey: cubit.ayaIndex!,
-                                  isAuto: cubit.isAuto!,
-                                  pageController: pageController,
-                                );
-                              },
-                              child: Text(
-                                'الاعدادات',
-                                style: A18500,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: TextButton(
-                              onPressed: cubit.isAuto!
-                                  ? () {
-                                      cubit.autoPlay();
-                                      cubit.player.stop();
-                                    }
-                                  : () {
-                                      cubit.autoPlay();
-                                      cubit.playVerse(key, '3');
-                                      pageController.animateTo(
-                                        pageController.offset + 1,
-                                        duration: Duration(milliseconds: 300),
-                                        curve: Curves.easeIn,
-                                      );
-                                      cubit.random();
-                                    },
-                              child: cubit.isAuto!
-                                  ? Text(
-                                      'إيقاف',
-                                      style: A18500,
-                                    )
-                                  : Text(
-                                      'تلاوة مستمرة',
-                                      style: A18500,
-                                    ),
-                            ),
-                          ),
-                        ],
+                      // Row(
+                      //   children: [
+                      //     Expanded(
+                      //       child: TextButton(
+                      //         onPressed: () {
+                      //           showModalBottomSheet(
+                      //             context: context,
+                      //             builder: (c) => Container(
+                      //               width: double.infinity,
+                      //               padding: const EdgeInsets.all(10),
+                      //               color: secondaryColor,
+                      //               child: Column(
+                      //                 children: [
+                      //                   InkWell(
+                      //                     onTap: () {
+                      //                       navigateBack(context);
+                      //                       showModalBottomSheet(
+                      //                         context: context,
+                      //                         builder: (c) => Container(
+                      //                           width: double.infinity,
+                      //                           height: 400,
+                      //                           color: primaryColor,
+                      //                           child: Column(
+                      //                             children: [
+                      //                               Text(
+                      //                                 'Mohamed',
+                      //                                 style: A16500,
+                      //                               ),
+                      //                             ],
+                      //                           ),
+                      //                         ),
+                      //                       );
+                      //                     },
+                      //                     child: Container(
+                      //                       width: double.infinity,
+                      //                       height: 60,
+                      //                       decoration: BoxDecoration(
+                      //                         color: primaryColor,
+                      //                         borderRadius:
+                      //                             BorderRadius.circular(20),
+                      //                         border: Border.all(
+                      //                           width: 2,
+                      //                           color: Colors.grey[100]!,
+                      //                         ),
+                      //                       ),
+                      //                       child: Row(
+                      //                         children: [
+                      //                           Text(
+                      //                             'تغيير القارئ',
+                      //                             style: A16500,
+                      //                           ),
+                      //                           Icon(
+                      //                             Iconsax.money_change,
+                      //                           )
+                      //                         ],
+                      //                       ),
+                      //                     ),
+                      //                   ),
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //           );
+                      //         },
+                      //         child: Text(
+                      //           'الاعدادات',
+                      //           style: A18500,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     Expanded(
+                      //       child: TextButton(
+                      //         onPressed: cubit.isAuto!
+                      //             ? () {
+                      //                 cubit.autoPlay();
+                      //                 cubit.player.stop();
+                      //               }
+                      //             : () {
+                      //                 cubit.autoPlay();
+                      //                 cubit.playVerse(key, '3');
+                      //                 pageController.animateTo(
+                      //                   pageController.offset + 1,
+                      //                   duration: Duration(milliseconds: 300),
+                      //                   curve: Curves.easeIn,
+                      //                 );
+                      //                 cubit.random();
+                      //               },
+                      //         child: cubit.isAuto!
+                      //             ? Text(
+                      //                 'إيقاف',
+                      //                 style: A18500,
+                      //               )
+                      //             : Text(
+                      //                 'تلاوة مستمرة',
+                      //                 style: A18500,
+                      //               ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      FloatingActionButton(
+                        backgroundColor: secondaryColor,
+                        onPressed: () {
+                          cubit.playVerse(
+                            cubit.ayaIndex,
+                            cubit.recitor!,
+                          );
+                        },
+                        child: Icon(
+                          Iconsax.play,
+                        ),
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                     ],
                   ),
