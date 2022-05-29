@@ -41,6 +41,7 @@ dependencies:
   hexcolor: ^2.0.5
   iconsax: ^0.0.8
   just_audio: null
+  speech_to_text: ^5.4.3
 
 dev_dependencies:
   flutter_lints: ^1.0.0
